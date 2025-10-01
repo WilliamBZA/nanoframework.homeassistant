@@ -5,22 +5,22 @@ namespace NanoFramework.HomeAssistant.Items
 {
     public class Switch : HomeAssistantItem
     {
-        public Switch(string switchName, string initialState)
-            : base(initialState)
+        internal Switch(HomeAssistant homeAssistant, string switchName, string initialState)
+            : base(homeAssistant, initialState)
         {
             this.switchName = switchName;
         }
 
         public override string GetDiscoveryTopic() => $"homeassistant/switch/{homeAssistant.DeviceName.Replace(" ", "-")}/{switchName.Replace(" ", "-")}/config";
-        public override string GetCommandTopic() => $"nanoframework/switches/{switchName.Replace(" ", "-")}/set";
-        public override string GetStateTopic() => $"nanoframework/switches/{switchName.Replace(" ", "-")}/state";
-        public override string GetAvailabilityTopic() => $"nanoframework/{switchName.Replace(" ", "-")}/state";
+        public override string GetCommandTopic() => $"nanoframework/switches/{homeAssistant.DeviceName.Replace(" ", "-")}/{switchName.Replace(" ", "-")}/set";
+        public override string GetStateTopic() => $"nanoframework/switches/{homeAssistant.DeviceName.Replace(" ", "-")}/{switchName.Replace(" ", "-")}/state";
+        public override string GetAvailabilityTopic() => $"nanoframework/{homeAssistant.DeviceName.Replace(" ", "-")}/{switchName.Replace(" ", "-")}/availability";
 
         public override string ToDiscoveryMessage()
         {
             return "{"
-                + "\"name\": \"" + switchName + " switch\","
-                + "\"unique_id\": \"" + switchName.Replace(" ", "-") + "-switch\","
+                + "\"name\": \"" + switchName + "\","
+                + "\"unique_id\": \"" + homeAssistant.DeviceName.Replace(" ", "-") + "-" + switchName.Replace(" ", "-") + "-switch\","
                 + "\"state_topic\": \"" + GetStateTopic() + "\","
                 + "\"command_topic\": \"" + GetCommandTopic() + "\","
                 + "\"availability_topic\": \"" + GetAvailabilityTopic() + "\","

@@ -47,5 +47,26 @@ namespace NanoFramework.HomeAssistant
 
             return sb.ToString();
         }
+
+        public static TimeSpan ParseTimeString(string timeString)
+        {
+            var parts = timeString.Split(':');
+            if (parts.Length != 2)
+            {
+                throw new ArgumentException($"Invalid time format. Expected HH:mm, got {timeString}");
+            }
+
+            if (!int.TryParse(parts[0], out int hours) || !int.TryParse(parts[1], out int minutes))
+            {
+                throw new ArgumentException($"Invalid time format. Expected HH:mm, got {timeString}");
+            }
+
+            if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59)
+            {
+                throw new ArgumentException($"Invalid time values. Hours must be 0-23, minutes must be 0-59");
+            }
+
+            return new TimeSpan(hours, minutes, 0);
+        }
     }
 }

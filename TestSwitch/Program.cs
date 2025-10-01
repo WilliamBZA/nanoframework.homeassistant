@@ -35,30 +35,32 @@ namespace TestSwitch
                 }
             }
 
-            if (state.IsOn)
-            {
-                ledPin.Write(PinValue.High);
-            }
-
             ConnectToWiFi();
 
             var homeassistent = new HomeAssistant("testClient", "192.168.88.172", username: "homeassistant", password: "mindfree");
 
-            var relay = new Switch("Pool Pump", state.IsOn ? "ON" : "OFF");
+            var now = DateTime.UtcNow.AddHours(2);
+            var today = now.Date;
+            var onTime = today.Add(StringExtentionMethods.ParseTimeString(state.OnTime));
+            var offTime = today.Add(StringExtentionMethods.ParseTimeString(state.OffTime));
+
+            var isOnAtStartup = now >= onTime && now < offTime;
+            if (isOnAtStartup)
+            {
+                ledPin.Write(PinValue.High);
+            }
+
+            var relay = homeassistent.AddSwitch("Pool Pump", isOnAtStartup ? "ON" : "OFF");
             relay.OnSet(message =>
             {
                 if (message == "ON")
                 {
                     ledPin.Write(PinValue.High);
-                    state.IsOn = true;
                 }
                 else
                 {
                     ledPin.Write(PinValue.Low);
-                    state.IsOn = false;
                 }
-
-                SaveCurrentState(state);
 
                 return message;
             });
@@ -77,7 +79,7 @@ namespace TestSwitch
             });
             timeManager.Start();
 
-            var timeOnOptions = new Option("On time", times, state.OnTime);
+            var timeOnOptions = homeassistent.AddOption("On time", times, state.OnTime);
             timeOnOptions.OnSet(message =>
             {
                 Console.WriteLine($"On time set to {message}");
@@ -89,7 +91,7 @@ namespace TestSwitch
                 return message;
             });
 
-            var timeOffOptions = new Option("Off time", times, state.OffTime);
+            var timeOffOptions = homeassistent.AddOption("Off time", times, state.OffTime);
             timeOffOptions.OnSet(message =>
             {
                 Console.WriteLine($"Off time set to {message}");
@@ -101,12 +103,7 @@ namespace TestSwitch
                 return message;
             });
 
-            homeassistent.AddItem(relay);
-            homeassistent.AddItem(timeOnOptions);
-            homeassistent.AddItem(timeOffOptions);
-
             homeassistent.Connect();
-
             Thread.Sleep(Timeout.Infinite);
         }
 

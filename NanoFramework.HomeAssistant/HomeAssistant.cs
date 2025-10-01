@@ -22,15 +22,24 @@ namespace NanoFramework.HomeAssistant
             this.password = password;
 
             items = new ArrayList();
+
+            AddLastUpdatedItem();
+        }
+
+        private void AddLastUpdatedItem()
+        {
+            var sensor = AddSensor("Last Updated", "", DeviceClass.Timestamp);
+
+            lastUpdatedTimer = new Timer((state) =>
+            {
+                if (isConnected)
+                {
+                    sensor.UpdateValue(DateTime.UtcNow.ToString("o"));
+                }
+            }, null, 0, 60000);
         }
 
         public string DeviceName { get; private set; }
-
-        public void AddItem(HomeAssistantItem item)
-        {
-            items.Add(item);
-            item.SetParent(this);
-        }
 
         public void Connect()
         {
@@ -56,13 +65,17 @@ namespace NanoFramework.HomeAssistant
             Console.WriteLine("Connected to MQTT Broker");
 
             PublishAutoDiscovery();
+            isConnected = true;
         }
 
         public void PublishAutoDiscovery()
         {
             foreach (HomeAssistantItem item in items)
             {
-                client.Subscribe(new[] { item.GetCommandTopic() }, new[] { MqttQoSLevel.AtLeastOnce });
+                if (!string.IsNullOrEmpty(item.GetCommandTopic()))
+                {
+                    client.Subscribe(new[] { item.GetCommandTopic() }, new[] { MqttQoSLevel.AtLeastOnce });
+                }
 
                 var topic = item.GetDiscoveryTopic();
                 var message = item.ToDiscoveryMessage();
@@ -78,6 +91,8 @@ namespace NanoFramework.HomeAssistant
             {
                 var topic = item.GetAvailabilityTopic();
                 client.Publish(topic, Encoding.UTF8.GetBytes("online"), null, null, MqttQoSLevel.AtMostOnce, true);
+                Console.WriteLine($"Publishing to topic '{topic}' with value: 'online'");
+
                 client.Publish(item.GetStateTopic(), Encoding.UTF8.GetBytes(item.GetState()), null, null, MqttQoSLevel.AtLeastOnce, true);
             }
         }
@@ -89,7 +104,40 @@ namespace NanoFramework.HomeAssistant
 
         internal void StateChanged(HomeAssistantItem item, string state)
         {
+            Console.WriteLine($"Publishing to topic '{item.GetStateTopic()}' with value: '{state}'");
             client.Publish(item.GetStateTopic(), Encoding.UTF8.GetBytes(state), null, null, MqttQoSLevel.AtMostOnce, true);
+        }
+
+        public Option AddOption(string name, string[] options, string initialState)
+        {
+            var option = new Option(this, name, options, initialState);
+            items.Add(option);
+
+            return option;
+        }
+
+        public Switch AddSwitch(string name, string initialState)
+        {
+            var @switch = new Switch(this, name, initialState);
+            items.Add(@switch);
+
+            return @switch;
+        }
+
+        public Sensor AddSensor(string sensorName, string unitOfMeasurement, DeviceClass deviceClass)
+        {
+            var sensor = new Sensor(this, sensorName, unitOfMeasurement, deviceClass);
+            items.Add(sensor);
+
+            return sensor;
+        }
+
+        public TextItem AddTextItem(string label, string initialState)
+        {
+            var textItem = new TextItem(this, label, initialState);
+            items.Add(textItem);
+
+            return textItem;
         }
 
         MqttClient client;
@@ -98,7 +146,9 @@ namespace NanoFramework.HomeAssistant
         private int port;
         private string username;
         private string password;
+        private bool isConnected = false;
 
         private ArrayList items;
+        private Timer lastUpdatedTimer;
     }
 }

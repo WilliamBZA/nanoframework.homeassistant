@@ -1,5 +1,6 @@
 ﻿namespace TimeTrigger;
 
+using NanoFramework.HomeAssistant;
 using System;
 using System.Threading;
 
@@ -15,57 +16,34 @@ public class TimeSwitch
 
         UpdateTodayTimes();
         CalculateIsOn();
+
+        previousState = IsOn;
     }
 
     private void UpdateTodayTimes()
     {
         var now = DateTime.UtcNow.AddHours(2);
         var today = now.Date;
-        onTime = today.Add(ParseTimeString(onTimeString));
-        offTime = today.Add(ParseTimeString(offTimeString));
+        onTime = today.Add(StringExtentionMethods.ParseTimeString(onTimeString));
+        offTime = today.Add(StringExtentionMethods.ParseTimeString(offTimeString));
 
-        if (onTime < now)
+        if (onTime < now && offTime < now)
         {
             onTime = onTime.AddDays(1);
-        }
-
-        if (offTime < now || offTime < onTime)
-        {
             offTime = offTime.AddDays(1);
         }
-    }
-
-    private TimeSpan ParseTimeString(string timeString)
-    {
-        var parts = timeString.Split(':');
-        if (parts.Length != 2)
-        {
-            throw new ArgumentException($"Invalid time format. Expected HH:mm, got {timeString}");
-        }
-
-        if (!int.TryParse(parts[0], out int hours) || !int.TryParse(parts[1], out int minutes))
-        {
-            throw new ArgumentException($"Invalid time format. Expected HH:mm, got {timeString}");
-        }
-
-        if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59)
-        {
-            throw new ArgumentException($"Invalid time values. Hours must be 0-23, minutes must be 0-59");
-        }
-
-        return new TimeSpan(hours, minutes, 0);
     }
 
     void CalculateIsOn()
     {
         var now = DateTime.UtcNow.AddHours(2).AddSeconds(5);
-        
+
+        IsOn = now >= onTime && now < offTime;
+
         if (now.Date > onTime.Date)
         {
             UpdateTodayTimes();
         }
-
-        IsOn = now >= onTime && now < offTime;
     }
 
     public void Start()
@@ -86,8 +64,9 @@ public class TimeSwitch
     {
         CalculateIsOn();
 
-        if (stateChangeCallback != null)
+        if (stateChangeCallback != null && previousState != IsOn)
         {
+            previousState = IsOn;
             stateChangeCallback(IsOn);
         }
 
@@ -100,6 +79,7 @@ public class TimeSwitch
         var now = DateTime.UtcNow.AddHours(2);
         var timeUntilOn = (int)(onTime - now).TotalMilliseconds;
         var timeUntilOff = (int)(offTime - now).TotalMilliseconds;
+        var timeUntilOneMinute = 60000;
 
         if (timeUntilOn < 0 && timeUntilOff < 0)
         {
@@ -110,12 +90,12 @@ public class TimeSwitch
 
         if (timeUntilOn > 0)
         {
-            return timeUntilOn;
+            return timeUntilOn > timeUntilOneMinute ? timeUntilOneMinute : timeUntilOn;
         }
 
         if (timeUntilOff > 0)
         {
-            return timeUntilOff;
+            return timeUntilOff > timeUntilOneMinute ? timeUntilOneMinute : timeUntilOff;
         }
 
         return 1000;
@@ -126,7 +106,7 @@ public class TimeSwitch
         offTimeString = newOffTime;
 
         UpdateTodayTimes();
-        CalculateIsOn();
+        TimerCallback(null);
         Start();
     }
 
@@ -135,12 +115,13 @@ public class TimeSwitch
         onTimeString = newOnTime;
 
         UpdateTodayTimes();
-        CalculateIsOn();
+        TimerCallback(null);
         Start();
     }
 
     public bool IsOn { get; private set; }
 
+    bool previousState;
     private string onTimeString;
     private string offTimeString;
     private DateTime onTime;

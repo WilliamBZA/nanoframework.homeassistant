@@ -22,7 +22,9 @@
     <Compile Include="HomeAssistant.cs" />
     <Compile Include="Items\HomeAssistantItem.cs" />
     <Compile Include="Items\Option.cs" />
+    <Compile Include="Items\Sensor.cs" />
     <Compile Include="Items\Switch.cs" />
+    <Compile Include="Items\TextItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtentionMethods.cs" />
   </ItemGroup>

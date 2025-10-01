@@ -3,7 +3,7 @@ using System.Text;
 
 namespace NanoFramework.HomeAssistant.Items
 {
-    public abstract class HomeAssistantItem(string state)
+    public abstract class HomeAssistantItem(HomeAssistant homeAssistant, string state)
     {
         public delegate string MessageAction(string message);
 
@@ -19,11 +19,6 @@ namespace NanoFramework.HomeAssistant.Items
             return state;
         }
 
-        public virtual void SetParent(HomeAssistant homeAssistant)
-        {
-            this.homeAssistant = homeAssistant;
-        }
-
         public void OnSet(MessageAction action)
         {
             setAction = action;
@@ -36,6 +31,6 @@ namespace NanoFramework.HomeAssistant.Items
         }
 
         protected MessageAction setAction;
-        protected HomeAssistant homeAssistant;
+        protected HomeAssistant homeAssistant = homeAssistant;
     }
 }
