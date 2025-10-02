@@ -37,7 +37,7 @@ namespace TestSwitch
 
             ConnectToWiFi();
 
-            var homeassistent = new HomeAssistant("Pool Pump", "192.168.88.172", username: "homeassistant", password: "mindfree");
+            var homeassistent = new HomeAssistant("Second Test", "192.168.88.172", username: "homeassistant", password: "mindfree");
 
             var now = DateTime.UtcNow.AddHours(2);
             var today = now.Date;
@@ -50,7 +50,7 @@ namespace TestSwitch
                 relayPin.Write(PinValue.High);
             }
 
-            var relay = homeassistent.AddSwitch("Pool Pump", isOnAtStartup ? "ON" : "OFF");
+            var relay = homeassistent.AddSwitch("Filter", isOnAtStartup ? "ON" : "OFF");
             relay.OnSet(message =>
             {
                 if (message == "ON")

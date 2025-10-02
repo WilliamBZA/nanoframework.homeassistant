@@ -12,9 +12,9 @@ namespace NanoFramework.HomeAssistant.Items
         }
 
         public override string GetDiscoveryTopic() => $"homeassistant/text/{homeAssistant.DeviceName.Replace(" ", "-")}/{label.Replace(" ", "-")}/config";
-        public override string GetCommandTopic() => $"nanoframework/switches/{homeAssistant.DeviceName.Replace(" ", "-")}/{label.Replace(" ", "-")}/set";
+        public override string GetCommandTopic() => $"nanoframework/text/{homeAssistant.DeviceName.Replace(" ", "-")}/{label.Replace(" ", "-")}/set";
         public override string GetStateTopic() => $"nanoframework/text/{homeAssistant.DeviceName.Replace(" ", "-")}/{label.Replace(" ", "-")}/state";
-        public override string GetAvailabilityTopic() => $"nanoframework/{homeAssistant.DeviceName.Replace(" ", "-")}/{label.Replace(" ", "-")}/availability";
+        public override string GetAvailabilityTopic() => $"nanoframework/text/{homeAssistant.DeviceName.Replace(" ", "-")}/{label.Replace(" ", "-")}/availability";
 
         public override string ToDiscoveryMessage()
         {
@@ -24,7 +24,7 @@ namespace NanoFramework.HomeAssistant.Items
                 + "\"state_topic\": \"" + GetStateTopic() + "\","
                 + "\"command_topic\": \"" + GetCommandTopic() + "\","
                 + "\"availability_topic\": \"" + GetAvailabilityTopic() + "\","
-                + "\"device\": { \"identifiers\": [ \"" + homeAssistant.DeviceName + "\" ] }}";
+                + "\"device\": { \"identifiers\": [ \"" + homeAssistant.DeviceName + "\" ], \"name\": \"" + homeAssistant.DeviceName + "\" }}";
         }
 
         string label;
