@@ -19,8 +19,8 @@ namespace TestSwitch
         public static void Main()
         {
             var controller = new GpioController();
-            var ledPin = controller.OpenPin(13, PinMode.Output);
-            ledPin.Write(PinValue.Low);
+            var relayPin = controller.OpenPin(13, PinMode.Output);
+            relayPin.Write(PinValue.Low);
 
             var state = new CurrentState();
             using (var stateFile = File.Open("I:\\state.json", FileMode.OpenOrCreate))
@@ -37,7 +37,7 @@ namespace TestSwitch
 
             ConnectToWiFi();
 
-            var homeassistent = new HomeAssistant("testClient", "192.168.88.172", username: "homeassistant", password: "mindfree");
+            var homeassistent = new HomeAssistant("Pool Pump", "192.168.88.172", username: "homeassistant", password: "mindfree");
 
             var now = DateTime.UtcNow.AddHours(2);
             var today = now.Date;
@@ -47,7 +47,7 @@ namespace TestSwitch
             var isOnAtStartup = now >= onTime && now < offTime;
             if (isOnAtStartup)
             {
-                ledPin.Write(PinValue.High);
+                relayPin.Write(PinValue.High);
             }
 
             var relay = homeassistent.AddSwitch("Pool Pump", isOnAtStartup ? "ON" : "OFF");
@@ -55,11 +55,11 @@ namespace TestSwitch
             {
                 if (message == "ON")
                 {
-                    ledPin.Write(PinValue.High);
+                    relayPin.Write(PinValue.High);
                 }
                 else
                 {
-                    ledPin.Write(PinValue.Low);
+                    relayPin.Write(PinValue.Low);
                 }
 
                 return message;

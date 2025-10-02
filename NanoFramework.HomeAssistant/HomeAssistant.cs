@@ -28,7 +28,7 @@ namespace NanoFramework.HomeAssistant
 
         private void AddLastUpdatedItem()
         {
-            var sensor = AddSensor("Last Updated", "", DeviceClass.Timestamp);
+            var sensor = AddSensor("Last Updated", "", DateTime.UtcNow.ToString("o"), DeviceClass.Timestamp);
 
             lastUpdatedTimer = new Timer((state) =>
             {
@@ -124,9 +124,9 @@ namespace NanoFramework.HomeAssistant
             return @switch;
         }
 
-        public Sensor AddSensor(string sensorName, string unitOfMeasurement, DeviceClass deviceClass)
+        public Sensor AddSensor(string sensorName, string unitOfMeasurement, string initialState, DeviceClass deviceClass)
         {
-            var sensor = new Sensor(this, sensorName, unitOfMeasurement, deviceClass);
+            var sensor = new Sensor(this, sensorName, unitOfMeasurement, initialState, deviceClass);
             items.Add(sensor);
 
             return sensor;

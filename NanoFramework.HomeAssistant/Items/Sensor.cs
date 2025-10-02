@@ -5,8 +5,8 @@ namespace NanoFramework.HomeAssistant.Items
 {
     public class Sensor : HomeAssistantItem
     {
-        internal Sensor(HomeAssistant homeAssistant, string sensorName, string unitOfMeasurement, DeviceClass deviceClass = DeviceClass.None)
-            : base(homeAssistant, "")
+        internal Sensor(HomeAssistant homeAssistant, string sensorName, string unitOfMeasurement, string initialState, DeviceClass deviceClass = DeviceClass.None)
+            : base(homeAssistant, initialState)
         {
             this.sensorName = sensorName;
             this.unitOfMeasurement = unitOfMeasurement;
