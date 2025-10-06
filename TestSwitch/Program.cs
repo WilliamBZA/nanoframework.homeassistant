@@ -51,9 +51,9 @@ namespace TestSwitch
             }
 
             var relay = homeassistent.AddSwitch("Filter", isOnAtStartup ? "ON" : "OFF");
-            relay.OnSet(message =>
+            relay.OnSetMessage += (s, e) =>
             {
-                if (message == "ON")
+                if (e == "ON")
                 {
                     relayPin.Write(PinValue.High);
                 }
@@ -61,9 +61,7 @@ namespace TestSwitch
                 {
                     relayPin.Write(PinValue.Low);
                 }
-
-                return message;
-            });
+            };
 
             var times = new[] {
                 "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00",
@@ -80,28 +78,24 @@ namespace TestSwitch
             timeManager.Start();
 
             var timeOnOptions = homeassistent.AddOption("On time", times, state.OnTime);
-            timeOnOptions.OnSet(message =>
+            timeOnOptions.OnSetMessage += (s, e) =>
             {
-                Console.WriteLine($"On time set to {message}");
-                state.OnTime = message;
-                timeManager.UpdateOnTime(message);
+                Console.WriteLine($"On time set to {e}");
+                state.OnTime = e;
+                timeManager.UpdateOnTime(e);
 
                 SaveCurrentState(state);
-
-                return message;
-            });
+            };
 
             var timeOffOptions = homeassistent.AddOption("Off time", times, state.OffTime);
-            timeOffOptions.OnSet(message =>
+            timeOffOptions.OnSetMessage += (s, e) =>
             {
-                Console.WriteLine($"Off time set to {message}");
-                state.OffTime = message;
-                timeManager.UpdateOffTime(message);
+                Console.WriteLine($"Off time set to {e}");
+                state.OffTime = e;
+                timeManager.UpdateOffTime(e);
 
                 SaveCurrentState(state);
-
-                return message;
-            });
+            };
 
             homeassistent.Connect();
             Thread.Sleep(Timeout.Infinite);
