@@ -50,12 +50,12 @@ public class TimeSwitch
     {
         if (timer != null)
         {
-            Console.WriteLine($"OnTime: {onTime} OffTime: {offTime}");
+            Console.WriteLine($"Restarting timer OnTime: {onTime} OffTime: {offTime}");
             timer.Change(CalculateTimerInterval(), Timeout.Infinite);
         }
         else
         {
-            Console.WriteLine($"OnTime: {onTime} OffTime: {offTime}");
+            Console.WriteLine($"New timer OnTime: {onTime} OffTime: {offTime}");
             timer = new Timer(TimerCallback, null, CalculateTimerInterval(), Timeout.Infinite);
         }
     }
@@ -71,7 +71,7 @@ public class TimeSwitch
         }
 
         timer.Change(CalculateTimerInterval(), Timeout.Infinite);
-        Console.WriteLine($"OnTime: {onTime} OffTime: {offTime}");
+        Console.WriteLine($"Timer Callback OnTime: {onTime} OffTime: {offTime}");
     }
 
     private int CalculateTimerInterval()

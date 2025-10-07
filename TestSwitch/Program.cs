@@ -51,7 +51,7 @@ namespace TestSwitch
             }
 
             var relay = homeassistent.AddSwitch("Filter", isOnAtStartup ? "ON" : "OFF");
-            relay.OnSetMessage += (s, e) =>
+            relay.OnChange += (s, e) =>
             {
                 if (e == "ON")
                 {
@@ -78,7 +78,7 @@ namespace TestSwitch
             timeManager.Start();
 
             var timeOnOptions = homeassistent.AddOption("On time", times, state.OnTime);
-            timeOnOptions.OnSetMessage += (s, e) =>
+            timeOnOptions.OnChange += (s, e) =>
             {
                 Console.WriteLine($"On time set to {e}");
                 state.OnTime = e;
@@ -88,7 +88,7 @@ namespace TestSwitch
             };
 
             var timeOffOptions = homeassistent.AddOption("Off time", times, state.OffTime);
-            timeOffOptions.OnSetMessage += (s, e) =>
+            timeOffOptions.OnChange += (s, e) =>
             {
                 Console.WriteLine($"Off time set to {e}");
                 state.OffTime = e;
