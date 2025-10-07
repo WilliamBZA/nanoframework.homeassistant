@@ -5,7 +5,8 @@ namespace NanoFramework.HomeAssistant.Items
 {
     public abstract class HomeAssistantItem(HomeAssistant homeAssistant, string state)
     {
-        public delegate string MessageAction(string message);
+        public delegate void MessageAction(object sender, string message);
+        public event MessageAction OnChange;
 
         public abstract string GetDiscoveryTopic();
         public abstract string ToDiscoveryMessage();
@@ -19,14 +20,14 @@ namespace NanoFramework.HomeAssistant.Items
             return state;
         }
 
-        public void OnSet(MessageAction action)
-        {
-            setAction = action;
-        }
-
         public void Trigger(string message)
         {
-            state = setAction?.Invoke(message);
+            if (message != state && OnChange != null)
+            {
+                OnChange(this, message);
+            }
+
+            state = message;
             homeAssistant.StateChanged(this, state);
         }
 
