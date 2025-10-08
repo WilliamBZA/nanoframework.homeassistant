@@ -21,7 +21,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="nanoFramework.WebServer\bin\Release\nanoFramework.WebServer.*" target="lib" />
+    <file src="nanoFramework.HomeAssistant.MqttDiscovery\bin\Release\nanoFramework.HomeAssistant.MqttDiscovery.*" target="lib" />
     <file src="README.md" target="" />
     <file src="LICENSE.md" target="" />
   </files>
