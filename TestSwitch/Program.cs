@@ -72,7 +72,7 @@ namespace TestSwitch
 
             var timeManager = new TimeSwitch(state.OnTime, state.OffTime, isOn =>
             {
-                relay.Trigger(isOn ? "ON" : "OFF");
+                relay.SetState(isOn ? "ON" : "OFF");
                 Console.WriteLine($"{DateTime.UtcNow} State changed to {(isOn ? "On" : "Off")} ");
             });
             timeManager.Start();

@@ -20,7 +20,7 @@ namespace nanoFramework.HomeAssistant.MqttDiscovery.Items
             return state;
         }
 
-        public void Trigger(string message)
+        public void SetState(string message)
         {
             if (message != state && OnChange != null)
             {

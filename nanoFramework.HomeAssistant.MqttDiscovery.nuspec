@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>nanoFramework.HomeAssistant.MqttDiscovery</id>
+    <title>nanoFramework.HomeAssistant.MqttDiscovery</title>
+    <version>$version$</version>
+    <authors>William Brander</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.md</license>
+    <releaseNotes>
+    </releaseNotes>
+    <readme>README.md</readme>
+    <developmentDependency>false</developmentDependency>
+    <projectUrl>https://github.com/williambza/nanoframework.homeassistant.mqttdiscovery</projectUrl>
+    <icon>images\nf-logo.png</icon>
+    <repository type="git" url="https://github.com/williambza/nanoframework.homeassistant.mqttdiscovery" commit="$commit$" />
+    <description>A lightweight library for .NET nanoFramework that simplifies Home Assistant MQTT Auto Discovery, letting your IoT devices register entities automatically without manual configuration.</description>
+    <tags>homeassistant hass mqtt autodiscovery nf nanoframework</tags>
+    <dependencies>
+      <dependency id="nanoFramework.CoreLibrary" version="1.17.11" />
+      <dependency id="nanoFramework.System.Net.Http.Server" version="1.5.196" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="nanoFramework.WebServer\bin\Release\nanoFramework.WebServer.*" target="lib" />
+    <file src="README.md" target="" />
+    <file src="LICENSE.md" target="" />
+  </files>
+</package>

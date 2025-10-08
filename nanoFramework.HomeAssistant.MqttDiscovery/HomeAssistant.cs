@@ -55,7 +55,7 @@ namespace nanoFramework.HomeAssistant.MqttDiscovery
                 {
                     if (item.GetCommandTopic() == e.Topic)
                     {
-                        item.Trigger(message);
+                        item.SetState(message);
                     }
                 }
             };
