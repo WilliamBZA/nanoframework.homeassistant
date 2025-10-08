@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>nanoFramework.HomeAssistant.MqttDiscovery</id>
-    <title>nanoFramework.HomeAssistant.MqttDiscovery</title>
+    <id>nf.HomeAssistant.MqttDiscovery</id>
+    <title>nf.HomeAssistant.MqttDiscovery</title>
     <version>$version$</version>
     <authors>William Brander</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

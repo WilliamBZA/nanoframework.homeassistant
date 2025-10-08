@@ -55,6 +55,13 @@ temperatureSensor.OnChange += (s, e) =>
     Console.WriteLine($"Temperature changed to {e}");
 };
 
+// Example: Add select options
+var dayOfWeek = homeassistant.AddOption("Day of week", new [] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" } , "Tuesday");
+dayOfWeek.OnChange += (s, e) =>
+{
+    Console.WriteLine($"Day of week changed to {e}");
+};
+
 // Connect to home assistant
 homeassistant.Connect();
 
