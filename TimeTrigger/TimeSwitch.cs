@@ -1,6 +1,6 @@
 ﻿namespace TimeTrigger;
 
-using NanoFramework.HomeAssistant;
+using nanoFramework.HomeAssistant.MqttDiscovery;
 using System;
 using System.Threading;
 

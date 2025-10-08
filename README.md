@@ -1,1 +1,1 @@
-# nanoframework.homeassistant
+# nanoFramework.HomeAssistant.MqttDiscovery

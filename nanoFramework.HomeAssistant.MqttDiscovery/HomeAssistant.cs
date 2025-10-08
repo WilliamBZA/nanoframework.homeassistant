@@ -1,6 +1,6 @@
 ﻿using nanoFramework.M2Mqtt;
 using nanoFramework.M2Mqtt.Messages;
-using NanoFramework.HomeAssistant.Items;
+using nanoFramework.HomeAssistant.MqttDiscovery.Items;
 using System;
 using System.Collections;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace NanoFramework.HomeAssistant
+namespace nanoFramework.HomeAssistant.MqttDiscovery
 {
     public class HomeAssistant : IDisposable
     {

@@ -65,7 +65,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NanoFramework.HomeAssistant\NanoFramework.HomeAssistant.nfproj" />
+    <ProjectReference Include="..\nanoFramework.HomeAssistant.MqttDiscovery\nanoFramework.HomeAssistant.MqttDiscovery.nfproj" />
     <ProjectReference Include="..\TimeTrigger\TimeTrigger.nfproj" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />

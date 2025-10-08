@@ -1,7 +1,7 @@
 using nanoFramework.Json;
 using nanoFramework.Networking;
-using NanoFramework.HomeAssistant;
-using NanoFramework.HomeAssistant.Items;
+using nanoFramework.HomeAssistant.MqttDiscovery;
+using nanoFramework.HomeAssistant.MqttDiscovery.Items;
 using System;
 using System.Device.Gpio;
 using System.Diagnostics;

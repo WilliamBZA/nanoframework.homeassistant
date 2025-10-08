@@ -12,8 +12,8 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>NanoFramework.HomeAssistant</RootNamespace>
-    <AssemblyName>NanoFramework.HomeAssistant</AssemblyName>
+    <RootNamespace>nanoFramework.HomeAssistant.MqttDiscovery</RootNamespace>
+    <AssemblyName>nanoFramework.HomeAssistant.MqttDiscovery</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
     <langVersion>latest</langVersion>
   </PropertyGroup>

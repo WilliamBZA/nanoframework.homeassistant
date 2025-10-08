@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace NanoFramework.HomeAssistant.Items
+namespace nanoFramework.HomeAssistant.MqttDiscovery.Items
 {
     public class Option : HomeAssistantItem
     {
