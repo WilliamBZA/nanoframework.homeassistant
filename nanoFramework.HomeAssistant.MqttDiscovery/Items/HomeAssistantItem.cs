@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace NanoFramework.HomeAssistant.Items
+namespace nanoFramework.HomeAssistant.MqttDiscovery.Items
 {
     public abstract class HomeAssistantItem(HomeAssistant homeAssistant, string state)
     {
@@ -20,7 +20,7 @@ namespace NanoFramework.HomeAssistant.Items
             return state;
         }
 
-        public void Trigger(string message)
+        public void SetState(string message)
         {
             if (message != state && OnChange != null)
             {

@@ -1,7 +1,7 @@
 using nanoFramework.Json;
 using nanoFramework.Networking;
-using NanoFramework.HomeAssistant;
-using NanoFramework.HomeAssistant.Items;
+using nanoFramework.HomeAssistant.MqttDiscovery;
+using nanoFramework.HomeAssistant.MqttDiscovery.Items;
 using System;
 using System.Device.Gpio;
 using System.Diagnostics;
@@ -72,7 +72,7 @@ namespace TestSwitch
 
             var timeManager = new TimeSwitch(state.OnTime, state.OffTime, isOn =>
             {
-                relay.Trigger(isOn ? "ON" : "OFF");
+                relay.SetState(isOn ? "ON" : "OFF");
                 Console.WriteLine($"{DateTime.UtcNow} State changed to {(isOn ? "On" : "Off")} ");
             });
             timeManager.Start();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace NanoFramework.HomeAssistant
+namespace nanoFramework.HomeAssistant.MqttDiscovery
 {
     public static class StringExtentionMethods
     {
