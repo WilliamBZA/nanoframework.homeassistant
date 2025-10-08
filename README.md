@@ -19,7 +19,7 @@ This library lets your devices automatically register entities like sensors and 
 
 You can install the package via NuGet:
 
-`nuget install nanoFramework.HomeAssistant.MqttDiscovery`
+`nuget install nf.HomeAssistant.MqttDiscovery`
 
 ## Example usage
 
@@ -101,5 +101,6 @@ This project is licensed under the MIT License.
 ## Contributing
 
 Contributions, issues, and feature requests are welcome!
+
 
 Feel free to open an issue or pull request on the GitHub repository.
