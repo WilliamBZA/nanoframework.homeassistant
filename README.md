@@ -85,6 +85,7 @@ For more details: [Home Assistant MQTT Discovery Docs](https://www.home-assistan
   - All types defined on https://www.home-assistant.io/integrations/sensor/#device-class
 - Switches
 - Text inputs
+- Select options
 
 ## License
 
