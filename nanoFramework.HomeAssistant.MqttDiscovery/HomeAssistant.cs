@@ -32,7 +32,7 @@ namespace nanoFramework.HomeAssistant.MqttDiscovery
 
             lastUpdatedTimer = new Timer((state) =>
             {
-                if (isConnected)
+                if (client != null && client.IsConnected)
                 {
                     sensor.UpdateValue(DateTime.UtcNow.ToString("o"));
                 }
@@ -43,29 +43,32 @@ namespace nanoFramework.HomeAssistant.MqttDiscovery
 
         public void Connect()
         {
-            client = new MqttClient(brokerIp, port, false, null, null, MqttSslProtocols.None);
-            client.ProtocolVersion = MqttProtocolVersion.Version_3_1;
+            MqttReasonCode retCode;
 
-            client.MqttMsgPublishReceived += (sender, e) =>
+            do
             {
-                var message = Encoding.UTF8.GetString(e.Message, 0, e.Message.Length);
-                Console.WriteLine($"Received message on topic {e.Topic}: {message}");
+                client = new MqttClient(brokerIp, port, false, null, null, MqttSslProtocols.None);
 
-                foreach (HomeAssistantItem item in items)
+                client.MqttMsgPublishReceived += (sender, e) =>
                 {
-                    if (item.GetCommandTopic() == e.Topic)
-                    {
-                        item.SetState(message);
-                    }
-                }
-            };
+                    var message = Encoding.UTF8.GetString(e.Message, 0, e.Message.Length);
+                    Console.WriteLine($"Received message on topic {e.Topic}: {message}");
 
-            client.Connect(DeviceName, username, password);
+                    foreach (HomeAssistantItem item in items)
+                    {
+                        if (item.GetCommandTopic() == e.Topic)
+                        {
+                            item.SetState(message);
+                        }
+                    }
+                };
+
+                retCode = client.Connect(DeviceName, username, password);
+            } while (retCode != MqttReasonCode.Success);
 
             Console.WriteLine("Connected to MQTT Broker");
 
             PublishAutoDiscovery();
-            isConnected = true;
         }
 
         public void PublishAutoDiscovery()
@@ -104,6 +107,8 @@ namespace nanoFramework.HomeAssistant.MqttDiscovery
 
         internal void StateChanged(HomeAssistantItem item, string state)
         {
+            ValidateConnection();
+
             Console.WriteLine($"Publishing to topic '{item.GetStateTopic()}' with value: '{state}'");
             client.Publish(item.GetStateTopic(), Encoding.UTF8.GetBytes(state), null, null, MqttQoSLevel.AtMostOnce, true);
         }
@@ -140,13 +145,22 @@ namespace nanoFramework.HomeAssistant.MqttDiscovery
             return textItem;
         }
 
+        private void ValidateConnection()
+        {
+            if (client.IsConnected)
+            {
+                return;
+            }
+
+            Connect();
+        }
+
         MqttClient client;
 
         private string brokerIp;
         private int port;
         private string username;
         private string password;
-        private bool isConnected = false;
 
         private ArrayList items;
         private Timer lastUpdatedTimer;
