@@ -69,6 +69,10 @@ homeassistant.Connect();
 relay.SetState("OFF"); // This publishes an MQTT event to the switch's state topic. Home assistant will show the new state of off.
 relayPin.Write(PinValue.Low);
 
+// Report the current temperature to Home Assistant
+var currentTemperature = GetCurrentTemperature();
+temperatureSensor.SetState($"{currentTemperature}");
+
 Thread.Sleep(Timeout.Infinite);
 ```
 
@@ -104,3 +108,4 @@ Contributions, issues, and feature requests are welcome!
 
 
 Feel free to open an issue or pull request on the GitHub repository.
+
